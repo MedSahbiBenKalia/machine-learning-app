@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h2>🎬 Movie Revenue Prediction Result</h2>
+
+        <div class="result">
+            {% if prediction_text %}
+            <h3>Predictions:</h3>
+            <p style="font-size: 1.2em; color: #2c3e50;">{{ prediction_text }}</p>
+            {% endif %}
+
+            {% if average_prediction %}
+            <p style="font-size: 1.1em; color: #27ae60; font-weight: bold;">{{ average_prediction }}</p>
+            {% endif %}
+
+            {% if cast_power_text %}
+            <p class="detail">{{ cast_power_text }}</p>
+            {% endif %}
+
+            {% if genres_selected %}
+            <p class="detail">{{ genres_selected }}</p>
+            {% endif %}
+
+            <a href="{{ url_for('home') }}" class="button">Make Another Prediction</a>
+        </div>
+    </div>
+</body>
+
+</html>
+
+</html>

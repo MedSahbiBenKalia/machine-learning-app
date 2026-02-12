@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Revenue Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>🎬 Movie Revenue Predictor</h2>
+
+        <form action="/predict" method="post">
+
+            <label>Budget ($)</label>
+            <input type="number" name="budget" placeholder="e.g. 50000000" required>
+
+            <label>Release Month</label>
+            <select name="month">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+
+            <label>Release Year</label>
+            <input type="number" name="year" placeholder="e.g. 2024" value="2024" required>
+
+            <!-- Cast / Crew Section -->
+            <h3 style="margin-top: 20px; color: #555;">🎭 Movie Cast (Top 3 Actors)</h3>
+
+            <div class="actor-group">
+                <label>Actor 1 (Lead)</label>
+                <div class="actor-row">
+                    <input type="text" name="actor1" id="actor1" placeholder="e.g. Tom Hanks">
+                    <button type="button" class="btn-lookup" onclick="lookupActor(1)">🔍 Check</button>
+                </div>
+                <div class="actor-status" id="status1"></div>
+            </div>
+
+            <div class="actor-group">
+                <label>Actor 2</label>
+                <div class="actor-row">
+                    <input type="text" name="actor2" id="actor2" placeholder="e.g. Scarlett Johansson">
+                    <button type="button" class="btn-lookup" onclick="lookupActor(2)">🔍 Check</button>
+                </div>
+                <div class="actor-status" id="status2"></div>
+            </div>
+
+            <div class="actor-group">
+                <label>Actor 3</label>
+                <div class="actor-row">
+                    <input type="text" name="actor3" id="actor3" placeholder="e.g. Morgan Freeman">
+                    <button type="button" class="btn-lookup" onclick="lookupActor(3)">🔍 Check</button>
+                </div>
+                <div class="actor-status" id="status3"></div>
+            </div>
+
+            <div class="cast-power-section">
+                <button type="button" class="btn-calc-power" onclick="calculateCastPower()">⚡ Calculate Cast Star
+                    Power</button>
+                <div class="cast-power-result" id="castPowerResult"></div>
+            </div>
+
+            <label>Country</label>
+            <select name="country">
+                <option value="US">USA</option>
+                <option value="GB">UK</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+                <option value="JP">Japan</option>
+                <option value="KR">South Korea</option>
+                <option value="CN">China</option>
+                <option value="IN">India</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label>Genre (select one or more)</label>
+            <div class="genre-grid">
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Drama"> Drama</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Comedy"> Comedy</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Action"> Action</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Thriller"> Thriller</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Adventure"> Adventure</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Romance"> Romance</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Horror"> Horror</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Animation"> Animation</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Family"> Family</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Fantasy"> Fantasy</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Crime"> Crime</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Science Fiction">
+                    Sci-Fi</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Mystery"> Mystery</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="History"> History</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="War"> War</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Music"> Music</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Documentary">
+                    Documentary</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="TV Movie"> TV Movie</label>
+                <label class="genre-checkbox"><input type="checkbox" name="genre" value="Western"> Western</label>
+            </div>
+
+            <label>Original Language</label>
+            <select name="language">
+                <option value="English">English</option>
+                <option value="French">French</option>
+                <option value="Spanish, Castilian">Spanish</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Korean">Korean</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <div style="margin-top: 15px;">
+                <input type="checkbox" name="is_sequel" style="width: auto;">
+                <label style="display: inline;">Is this a Sequel?</label>
+            </div>
+
+            <div class="form-group">
+                <label for="model_type">Select Model:</label>
+                <select name="model_type" id="model_type" class="form-control">
+                    <option value="all">All Models</option>
+                    <option value="decision_tree">Decision Tree Regressor</option>
+                    <option value="ensemble">Ensemble Regressor</option>
+                    <option value="knn">KNN Regressor</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict Box Office</button>
+        </form>
+
+        {% if predictions %}
+        <div class="result" id="result">
+            <h3>📊 Predictions:</h3>
+            {% for p in predictions %}
+            <div class="prediction-card">
+                <span class="model-name">{{ p.name }}</span>
+                <span class="model-value">{{ p.value }}</span>
+            </div>
+            {% endfor %}
+            {% if cast_power_text %}
+            <p class="detail">{{ cast_power_text }}</p>
+            {% endif %}
+            {% if genres_selected %}
+            <p class="detail">{{ genres_selected }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if prediction_text %}
+        <div class="result" id="result">
+            <p>{{ prediction_text }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
